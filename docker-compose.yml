@@ -1,0 +1,49 @@
+# version: '3.9'
+
+# services:
+#   postgres:
+#     image: postgres
+#     container_name: postgres
+#     # 컨테이너 실행 시 재시작
+#     restart: always
+#     environment:
+#       - POSTGRES_USER: root
+#       - POSTGRES_PASSWORD: password
+#     ports:
+# 	    - 5432:5432
+#     volumes:
+# 	    - ./data/postgres/:/var/lib/postgresql/data # db 볼륨 처리
+# #   # github:
+# #   #   restart: always
+# #   #   container_name: jenkins
+# #   #   image: jenkins/jenkins
+# #   #   ports:
+# #   #     - "8080:8080"
+# #   #   volumes:
+# #   #     - "./jenkins:/var/jenkins_home"
+# #   nginx:
+# #     image: nginx:1.21.5-alpine
+# #     ports:
+# #       - 80:80
+# #     volumes:
+# #       - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+# #     container_name: myweb-proxy
+
+
+#  버전 3 이상부터 docker swarm 와 호환
+version: '3.9'
+
+# 서비스 또는 컨테이너가 실행될 섹션을 시작
+services:
+  # web 컨테이너
+  web:
+    # 컨테이너를 생성할 때 사용할 이미지를 Docker에게 알려줌.
+    image: since1630/ticket-nest:latest
+    # 포트포워딩 ( 80번으로 들어온 요청을 3000번 포트로 연결)
+    ports:
+      - 80:3000
+      # pm2가 Docker 환경에서 실행 될 거고 main.js 파일을 실행할거임. 근데 코어 전부 가동함.
+    command: ['pm2-runtime', 'start', '/app/dist/main.js', '-i', 'max']
+
+
+   
